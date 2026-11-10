@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLASSROOM MONITOR | Monitoreo ambiental</title>
+<style>
+:root{--bg:#0b1220;--panel:#111c2d;--panel2:#162338;--line:#26364d;--text:#e8eef7;--muted:#8fa1b8;--blue:#56a8ff;--cyan:#45d2d0;--orange:#ffb45c;--purple:#b49aff;--green:#48d597;--red:#ff727c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 70% -20%,#1a3150 0,transparent 35%),var(--bg);color:var(--text);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif}
+.app{max-width:1500px;margin:auto;padding:24px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#2e8fe8,#45d2d0);display:grid;place-items:center;font-size:21px;color:#061321;font-weight:900}.brand h1{font-size:17px;letter-spacing:1.8px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:11px;letter-spacing:1px}
+.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pill,.select,.btn{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 12px}.pill{font-size:12px;color:var(--muted)}.dot{display:inline-block;width:7px;height:7px;background:var(--green);border-radius:50%;margin-right:7px;box-shadow:0 0 10px #48d597}.btn{cursor:pointer;font-weight:600}.btn:hover{border-color:var(--blue)}.btn.primary{background:#1d5f9d;border-color:#287bc2}.btn.active{background:#184c42;border-color:#2b9a75}
+.heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:2px;font-weight:700;text-transform:uppercase}.heading h2{font-size:25px;margin:4px 0 0}.sub{color:var(--muted);margin-top:4px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:15px}.card{background:linear-gradient(145deg,rgba(21,34,53,.98),rgba(15,26,42,.98));border:1px solid var(--line);border-radius:15px;padding:17px;min-width:0;box-shadow:0 12px 30px rgba(0,0,0,.12)}
+.metric{grid-column:span 4;position:relative;overflow:hidden}.metric:after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;right:-35px;top:-40px;background:var(--glow);opacity:.08}.metric-head{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px}.metric-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:17px;background:var(--iconbg);color:var(--accent)}.value{font-size:35px;font-weight:750;letter-spacing:-1px;margin:14px 0 2px}.unit{font-size:14px;color:var(--muted);font-weight:500}.metric-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:11px;color:var(--muted)}.status{padding:4px 8px;border-radius:20px;background:#183d35;color:#67dfae;font-weight:700}.status.warn{background:#49351f;color:#ffc476}.status.bad{background:#48252d;color:#ff8991}
+.wide{grid-column:span 8}.side{grid-column:span 4}.half{grid-column:span 6}.full{grid-column:span 12}.card-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.card-title h3{margin:0;font-size:14px}.card-title small{color:var(--muted);font-size:11px}.chart-wrap{height:230px;position:relative}.chart-wrap canvas{width:100%;height:100%;display:block}
+.legend{display:flex;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:11px}.legend span:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c);margin-right:6px}
+.room-list{display:grid;gap:9px}.room{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;border-radius:10px;background:var(--panel2);border:1px solid transparent;cursor:pointer}.room.selected{border-color:#347fc0;background:#172f49}.room strong{font-size:12px}.room small{display:block;color:var(--muted);font-size:10px;margin-top:2px}.room .room-state{font-size:10px;color:var(--green)}
+.overall{display:flex;align-items:center;gap:15px}.gauge{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--green) 0 78%,#26374c 78%);position:relative;flex-shrink:0}.gauge:before{content:"";position:absolute;inset:7px;background:var(--panel);border-radius:50%}.gauge b{position:relative;font-size:20px}.overall h3{margin:0 0 4px;font-size:14px}.overall p{margin:0;color:var(--muted);font-size:11px}
+.alerts{display:grid;gap:9px}.alert{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:9px;background:var(--panel2);font-size:11px}.alert .aicon{font-size:15px}.alert strong{display:block;font-size:11px;margin-bottom:2px}.alert span{color:var(--muted)}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:11px;min-width:520px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}td{color:#d8e2ef}.tag{padding:3px 7px;border-radius:15px;background:#183d35;color:#70dfb0;font-size:10px}
+.footer{display:flex;justify-content:space-between;gap:10px;color:#71849d;font-size:10px;margin-top:18px;flex-wrap:wrap}
+.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.select{padding:8px 10px;font-size:11px}.notice{color:var(--muted);font-size:10px;margin-top:10px}
+@media(max-width:850px){.metric{grid-column:span 6}.wide,.side{grid-column:span 12}.half{grid-column:span 12}}
+@media(max-width:520px){.app{padding:14px}.metric{grid-column:span 12}.heading h2{font-size:21px}.value{font-size:31px}.chart-wrap{height:190px}.topbar{margin-bottom:20px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+ <div class="brand"><div class="logo">CM</div><div><h1>CLASSROOM MONITOR</h1><p>ENVIRONMENTAL INTELLIGENCE SYSTEM</p></div></div>
+ <div class="top-actions"><span class="pill"><span class="dot" id="connectionDot"></span><span id="connectionText">SIMULACIÓN ACTIVA</span></span><span class="pill" id="clock">--:--:--</span><button class="btn" id="modeBtn">Modo: Simulación</button></div>
+</header>
+<section class="heading">
+ <div><div class="eyebrow">Panel de control / Monitoreo en vivo</div><h2>Resumen ambiental</h2><div class="sub">Supervisión de condiciones ambientales para espacios de aprendizaje.</div></div>
+ <div class="controls"><select class="select" id="roomSelect"><option value="Aula 101">Aula 101</option><option value="Aula 204">Aula 204</option><option value="Laboratorio">Laboratorio</option></select><button class="btn primary" id="pauseBtn">Ⅱ Pausar</button></div>
+</section>
+<section class="grid">
+ <article class="card metric" style="--accent:var(--orange);--iconbg:#3d3024;--glow:var(--orange)"><div class="metric-head"><span>TEMPERATURA AMBIENTAL</span><span class="metric-icon">♨</span></div><div class="value"><span id="tempValue">22.4</span><span class="unit"> °C</span></div><div class="metric-foot"><span id="tempHint">Confort térmico de referencia</span><span class="status" id="tempStatus">ADECUADO</span></div></article>
+ <article class="card metric" style="--accent:var(--cyan);--iconbg:#1d3b43;--glow:var(--cyan)"><div class="metric-head"><span>CONCENTRACIÓN DE CO₂</span><span class="metric-icon">◉</span></div><div class="value"><span id="co2Value">720</span><span class="unit"> ppm</span></div><div class="metric-foot"><span id="co2Hint">Indicador de ventilación</span><span class="status" id="co2Status">ADECUADO</span></div></article>
+ <article class="card metric" style="--accent:var(--purple);--iconbg:#302b49;--glow:var(--purple)"><div class="metric-head"><span>NIVEL DE RUIDO</span><span class="metric-icon">♫</span></div><div class="value"><span id="noiseValue">42</span><span class="unit"> dBA</span></div><div class="metric-foot"><span id="noiseHint">Ruido ambiental estimado</span><span class="status" id="noiseStatus">BAJO</span></div></article>
+ <article class="card wide"><div class="card-title"><div><h3>Evolución de variables ambientales</h3><small>Últimos registros · actualización automática</small></div><div class="legend"><span style="--c:var(--blue)">Temperatura</span><span style="--c:var(--cyan)">CO₂</span><span style="--c:var(--purple)">Ruido</span></div></div><div class="chart-wrap"><canvas id="mainChart"></canvas></div><div class="notice">Las series se muestran en escalas independientes para facilitar la lectura.</div></article>
+ <article class="card side"><div class="card-title"><h3>Estado general del aula</h3><small>Indicador orientativo</small></div><div class="overall"><div class="gauge" id="gauge"><b id="score">82</b></div><div><h3 id="overallTitle">Condiciones favorables</h3><p id="overallText">Las variables están dentro de los rangos configurados.</p></div></div><div style="height:14px"></div><div class="alerts" id="alerts"><div class="alert"><span class="aicon">✓</span><div><strong>Sin alertas críticas</strong><span>Monitoreo activo del ambiente.</span></div></div></div><div class="notice">El índice es demostrativo y no mide directamente la concentración de los estudiantes.</div></article>
+ <article class="card half"><div class="card-title"><h3>CO₂ · Calidad de ventilación</h3><small>ppm</small></div><div class="chart-wrap"><canvas id="co2Chart"></canvas></div></article>
+ <article class="card half"><div class="card-title"><h3>Ruido ambiental</h3><small>dBA</small></div><div class="chart-wrap"><canvas id="noiseChart"></canvas></div></article>
+ <article class="card half"><div class="card-title"><h3>Salas monitoreadas</h3><small>Selecciona una sala</small></div><div class="room-list"><div class="room selected" data-room="Aula 101"><div><strong>Aula 101</strong><small>Edificio principal · 32 puestos</small></div><span class="room-state">● Activa</span></div><div class="room" data-room="Aula 204"><div><strong>Aula 204</strong><small>Segundo piso · 28 puestos</small></div><span class="room-state">● Activa</span></div><div class="room" data-room="Laboratorio"><div><strong>Laboratorio</strong><small>Área de prácticas · 24 puestos</small></div><span class="room-state">● Activa</span></div></div></article>
+ <article class="card half"><div class="card-title"><h3>Últimas mediciones</h3><small id="lastUpdate">Actualizado hace unos segundos</small></div><div class="table-wrap"><table><thead><tr><th>HORA</th><th>TEMP.</th><th>CO₂</th><th>RUIDO</th><th>ESTADO</th></tr></thead><tbody id="historyBody"></tbody></table></div></article>
+ <article class="card full"><div class="card-title"><h3>Configuración y conexión</h3><small>Integración preparada para ESP32</small></div><div class="controls"><label class="pill">Fuente de datos: <select class="select" id="sourceSelect"><option value="simulation">Simulación de datos</option><option value="esp32">ESP32 · API local</option></select></label><label class="pill">Intervalo: <select class="select" id="intervalSelect"><option value="2000">2 segundos</option><option value="5000" selected>5 segundos</option><option value="10000">10 segundos</option></select></label><input class="select" id="espUrl" value="http://192.168.1.100/data" aria-label="URL ESP32" style="min-width:220px"><button class="btn" id="connectBtn">Probar conexión ESP32</button></div><div class="notice">API esperada: JSON con las propiedades <b>temperature</b>, <b>co2</b> y <b>noise</b>. Ejemplo: {"temperature":22.4,"co2":720,"noise":42}. Para conectar desde un navegador, el ESP32 deberá permitir CORS o servir esta misma página.</div></article>
+</section>
+<div class="footer"><span>CLASSROOM MONITOR · PROTOTIPO ACADÉMICO</span><span>Datos simulados mientras no exista conexión con sensores reales.</span></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let paused=false, mode='simulation', room='Aula 101', timer=null, tick=0;
+let current={temperature:22.4,co2:720,noise:42};
+const history=[];
+const maxPoints=24;
+function rand(a,b){return Math.random()*(b-a)+a}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function timeLabel(d=new Date()){return d.toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function makeCanvasChart(canvasId,series,labels){
+ const canvas=$(canvasId),ctx=canvas.getContext('2d');
+ const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+ canvas.width=Math.max(300,rect.width)*dpr;canvas.height=Math.max(150,rect.height)*dpr;
+ ctx.scale(dpr,dpr);const w=canvas.width/dpr,h=canvas.height/dpr;
+ const left=38,right=10,top=12,bottom=25,cw=w-left-right,ch=h-top-bottom;
+ ctx.clearRect(0,0,w,h);ctx.font='10px Segoe UI';ctx.fillStyle='#8093aa';ctx.strokeStyle='#26364d';ctx.lineWidth=1;
+ for(let i=0;i<4;i++){let y=top+ch*i/3;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();ctx.fillText((100-i*25)+'',4,y+3)}
+ labels.forEach((l,i)=>{if(i%Math.max(1,Math.ceil(labels.length/5))===0){let x=left+(labels.length<=1?0:i/(labels.length-1))*cw;ctx.fillText(l.slice(0,5),x-12,h-6)}});
+ series.forEach(s=>{if(!s.values.length)return;let min=s.min??Math.min(...s.values),max=s.max??Math.max(...s.values);if(max===min)max=min+1;ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.beginPath();s.values.forEach((v,i)=>{let x=left+(s.values.length<=1?0:i/(Math.max(1,s.values.length-1)))*cw;let y=top+ch-(v-min)/(max-min)*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();let last=s.values[s.values.length-1],x=left+cw,y=top+ch-(last-min)/(max-min)*ch;ctx.fillStyle=s.color;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill()});
+}
+function redraw(){
+ const labels=history.map(x=>x.time);
+ makeCanvasChart('mainChart',[
+ {values:history.map(x=>x.temperature),color:'#56a8ff',min:15,max:32},
+ {values:history.map(x=>x.co2),color:'#45d2d0',min:400,max:1800},
+ {values:history.map(x=>x.noise),color:'#b49aff',min:20,max:90}],labels);
+ makeCanvasChart('co2Chart',[{values:history.map(x=>x.co2),color:'#45d2d0',min:400,max:1800}],labels);
+ makeCanvasChart('noiseChart',[{values:history.map(x=>x.noise),color:'#b49aff',min:20,max:90}],labels);
+}
+function statusFor(v,type){
+ if(type==='co2')return v<1000?['ADECUADO','ok']:v<1500?['ELEVADO','warn']:['ALTO','bad'];
+ if(type==='temp')return v>=20&&v<=26?['ADECUADO','ok']:v>=18&&v<=28?['REVISAR','warn']:['FUERA DE RANGO','bad'];
+ return v<50?['BAJO','ok']:v<65?['MODERADO','warn']:['ALTO','bad'];
+}
+function setStatus(id,pair){$(id).textContent=pair[0];$(id).className='status '+(pair[1]==='ok'?'':pair[1])}
+function render(){
+ $('tempValue').textContent=current.temperature.toFixed(1);
+ $('co2Value').textContent=Math.round(current.co2);
+ $('noiseValue').textContent=Math.round(current.noise);
+ let ts=statusFor(current.temperature,'temp'),cs=statusFor(current.co2,'co2'),ns=statusFor(current.noise,'noise');
+ setStatus('tempStatus',ts);setStatus('co2Status',cs);setStatus('noiseStatus',ns);
+ let bad=[ts,cs,ns].filter(x=>x[1]==='bad').length,warn=[ts,cs,ns].filter(x=>x[1]==='warn').length;
+ let score=clamp(100-bad*27-warn*12-Math.max(0,current.co2-800)/70-Math.max(0,current.noise-45)*.5,20,100);
+ $('score').textContent=Math.round(score);$('gauge').style.background=`conic-gradient(${score>=75?'var(--green)':score>=50?'var(--orange)':'var(--red)'} 0 ${score}%,#26374c ${score}% 100%)`;
+ $('overallTitle').textContent=score>=75?'Condiciones favorables':score>=50?'Condiciones por revisar':'Condiciones desfavorables';
+ $('overallText').textContent=score>=75?'Las variables están dentro de los rangos configurados.':'Se recomienda revisar las variables ambientales señaladas.';
+ let alerts=[];if(cs[1]!=='ok')alerts.push(['⚠','CO₂ '+cs[0],'Revisar ventilación del aula.']);if(ts[1]!=='ok')alerts.push(['♨','Temperatura '+ts[0],'Revisar condiciones térmicas.']);if(ns[1]!=='ok')alerts.push(['♫','Ruido '+ns[0],'Revisar fuentes de ruido ambiental.']);
+ $('alerts').innerHTML=alerts.length?alerts.map(a=>`<div class="alert"><span class="aicon">${a[0]}</span><div><strong>${a[1]}</strong><span>${a[2]}</span></div></div>`).join(''):'<div class="alert"><span class="aicon">✓</span><div><strong>Sin alertas según los umbrales configurados</strong><span>Continúa el monitoreo ambiental.</span></div></div>';
+ $('historyBody').innerHTML=history.slice(-5).reverse().map(x=>`<tr><td>${x.time}</td><td>${x.temperature.toFixed(1)} °C</td><td>${Math.round(x.co2)} ppm</td><td>${Math.round(x.noise)} dBA</td><td><span class="tag">Registrado</span></td></tr>`).join('');
+ $('lastUpdate').textContent='Actualizado '+timeLabel();
+ redraw();
+}
+function simulate(){
+ tick++;
+ let roomShift=room==='Aula 204'?90:room==='Laboratorio'?-40:0;
+ current.temperature=clamp(current.temperature+rand(-.35,.35),18,29);
+ current.co2=clamp(current.co2+rand(-45,65)+roomShift*.04,450,1800);
+ current.noise=clamp(current.noise+rand(-5,6)+(Math.random()<.12?rand(8,18):0),25,82);
+}
+async function readEsp(){
+ const url=$('espUrl').value.trim();const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
+ const d=await r.json();
+ const t=Number(d.temperature),c=Number(d.co2),n=Number(d.noise);
+ if(!Number.isFinite(t)||!Number.isFinite(c)||!Number.isFinite(n))throw new Error('JSON sin temperature, co2 y noise válidos');
+ current={temperature:t,co2:c,noise:n};
+}
+async function step(){
+ if(paused)return;
+ try{
+  if(mode==='esp32'){await readEsp();$('connectionText').textContent='ESP32 CONECTADO';$('connectionDot').style.background='var(--green)'}
+  else{simulate();$('connectionText').textContent='SIMULACIÓN ACTIVA'}
+  history.push({...current,time:timeLabel()});if(history.length>maxPoints)history.shift();render();
+ }catch(e){$('connectionText').textContent='SIN CONEXIÓN ESP32';$('connectionDot').style.background='var(--red)';$('lastUpdate').textContent=e.message}
+}
+function restart(){clearInterval(timer);step();timer=setInterval(step,Number($('intervalSelect').value))}
+$('pauseBtn').onclick=()=>{paused=!paused;$('pauseBtn').textContent=paused?'▶ Reanudar':'Ⅱ Pausar';if(!paused)step()};
+$('modeBtn').onclick=()=>{$('sourceSelect').value=mode==='simulation'?'esp32':'simulation';$('sourceSelect').dispatchEvent(new Event('change'))};
+$('sourceSelect').onchange=()=>{mode=$('sourceSelect').value;$('modeBtn').textContent='Modo: '+(mode==='simulation'?'Simulación':'ESP32');restart()};
+$('intervalSelect').onchange=restart;
+$('connectBtn').onclick=async()=>{mode='esp32';$('sourceSelect').value='esp32';$('modeBtn').textContent='Modo: ESP32';await step()};
+$('roomSelect').onchange=e=>{room=e.target.value;document.querySelectorAll('.room').forEach(x=>x.classList.toggle('selected',x.dataset.room===room))};
+document.querySelectorAll('.room').forEach(x=>x.onclick=()=>{$('roomSelect').value=x.dataset.room;$('roomSelect').dispatchEvent(new Event('change'))});
+setInterval(()=>$('clock').textContent=new Date().toLocaleString('es-CL',{weekday:'short',hour:'2-digit',minute:'2-digit',second:'2-digit'}),1000);
+window.addEventListener('resize',redraw);
+for(let i=0;i<12;i++){simulate();history.push({...current,time:timeLabel(new Date(Date.now()-(11-i)*5000))})}
+render();restart();
+</script>
+</body>
+</html>
